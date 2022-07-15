@@ -90,6 +90,9 @@ export const MainPage: FC<IMainPageProps> = (props) => {
   // init contracts
   const yourContract = useAppContracts('YourContract', ethersAppContext.chainId);
   const yourNFT = useAppContracts('YourNFT', ethersAppContext.chainId);
+  const GLD = useAppContracts('GLD', ethersAppContext.chainId);
+  const Vendor = useAppContracts('Vendor', ethersAppContext.chainId);
+
   const mainnetDai = useAppContracts('DAI', NETWORKS.mainnet.chainId);
 
   // keep track of a variable from the contract in the local React state:
@@ -132,6 +135,26 @@ export const MainPage: FC<IMainPageProps> = (props) => {
       ),
     },
     pages: [
+      {
+        name: 'GLD',
+        content: (
+          <GenericContract
+            contractName="GLD"
+            contract={GLD}
+            mainnetAdaptor={scaffoldAppProviders.mainnetAdaptor}
+            blockExplorer={scaffoldAppProviders.targetNetwork.blockExplorer}></GenericContract>
+        ),
+      },
+      {
+        name: 'Vendor',
+        content: (
+          <GenericContract
+            contractName="Vendor"
+            contract={Vendor}
+            mainnetAdaptor={scaffoldAppProviders.mainnetAdaptor}
+            blockExplorer={scaffoldAppProviders.targetNetwork.blockExplorer}></GenericContract>
+        ),
+      },
       {
         name: 'YourNFT',
         content: (
