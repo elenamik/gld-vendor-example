@@ -6,12 +6,13 @@ import { useDexEthPrice } from 'eth-hooks/dapps';
 import { asEthersAdaptor } from 'eth-hooks/functions';
 import React, { FC, ReactElement } from 'react';
 
-import { Footer, Header } from '.';
+import { Header } from '../common/Header';
 
 import { useLoadAppContracts, useConnectAppContracts, useAppContracts } from '~common/components/context';
 import { useCreateAntNotificationHolder } from '~common/components/hooks/useAntNotification';
 import { useBurnerFallback } from '~common/components/hooks/useBurnerFallback';
 import { useScaffoldAppProviders } from '~common/components/hooks/useScaffoldAppProviders';
+import { Footer } from '~~/components/common/Footer';
 import {
   BURNER_FALLBACK_ENABLED,
   CONNECT_TO_BURNER_AUTOMATICALLY,
