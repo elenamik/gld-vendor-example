@@ -82,7 +82,7 @@ module.exports = {
       'warn',
       { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
     ],
-    '@typescript-eslint/no-use-before-define': ['error'],
+    '@typescript-eslint/no-use-before-define': ['off'],
     '@typescript-eslint/no-inferrable-types': 'off',
     '@typescript-eslint/no-unsafe-assignment': 'warn',
     '@typescript-eslint/no-explicit-any': 'off',

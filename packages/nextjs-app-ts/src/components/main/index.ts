@@ -1,3 +1,3 @@
-export * from './MainPageFooter';
-export * from './MainPageHeader';
+export * from './Footer';
+export * from './Header';
 export * from './createTabsAndPages';

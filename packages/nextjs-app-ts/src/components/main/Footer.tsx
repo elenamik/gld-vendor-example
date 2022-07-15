@@ -1,15 +1,15 @@
 import { Row, Col, Button } from 'antd';
 import { Faucet, GasGauge } from 'eth-components/ant';
 import { useEthersAppContext } from 'eth-hooks/context';
-import React, { FC } from 'react';
+import React, { FC, Suspense } from 'react';
 
-import { Ramp, ThemeSwitcher, getFaucetAvailable } from '~common/components';
+import { Ramp, getFaucetAvailable, ThemeSwitcher } from '~common/components';
 import { NETWORKS } from '~common/constants';
 import { getNetworkInfo } from '~common/functions';
 import { IScaffoldAppProviders } from '~common/models';
 import { FAUCET_ENABLED } from '~~/config/app.config';
 
-export interface IMainPageFooterProps {
+export interface IFooterProps {
   scaffoldAppProviders: IScaffoldAppProviders;
   price: number;
   children?: React.ReactNode;
@@ -20,7 +20,7 @@ export interface IMainPageFooterProps {
  * @param props
  * @returns
  */
-export const MainPageFooter: FC<IMainPageFooterProps> = (props) => {
+export const Footer: FC<IFooterProps> = (props) => {
   const ethersAppContext = useEthersAppContext();
 
   // Faucet Tx can be used to send funds from the faucet
@@ -106,7 +106,7 @@ export const MainPageFooter: FC<IMainPageFooterProps> = (props) => {
   return (
     <>
       {left}
-      {right}
+      <Suspense fallback={<div></div>}>{right}</Suspense>
     </>
   );
 };

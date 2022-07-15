@@ -5,6 +5,7 @@ import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import { IEthComponentsSettings } from 'eth-components/models';
 import type { AppProps } from 'next/app';
+import Head from 'next/head';
 import React, { FC, Suspense, useState } from 'react';
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 
@@ -58,6 +59,14 @@ const App: FC<AppProps> = ({ Component, ...props }) => {
           <AppContexts themes={themes} savedTheme={savedTheme} ethComponentsSettings={ethComponentsSettings}>
             <Hydrate state={props.pageProps.dehydratedState}>
               <Suspense fallback={<div />}>
+                <Head>
+                  <title>GLD Vendor</title>
+                  <meta
+                    name="description"
+                    content="Vendor which buys and sells fictional GLD tokens on an Ethereum testnet"
+                  />
+                  <link rel="icon" href="/favicon.ico" />
+                </Head>
                 <Component {...props.pageProps} />
               </Suspense>
             </Hydrate>
