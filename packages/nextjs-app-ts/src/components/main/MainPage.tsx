@@ -1,7 +1,7 @@
 /* eslint-disable unused-imports/no-unused-vars-ts */
 
 import { GenericContract } from 'eth-components/ant/generic-contract';
-import { useContractReader, useBalance, useEthersAdaptorFromProviderOrSigners, useEventListener } from 'eth-hooks';
+import { useBalance, useEthersAdaptorFromProviderOrSigners } from 'eth-hooks';
 import { useEthersAppContext } from 'eth-hooks/context';
 import { useDexEthPrice } from 'eth-hooks/dapps';
 import { asEthersAdaptor } from 'eth-hooks/functions';
@@ -14,7 +14,6 @@ import { useLoadAppContracts, useConnectAppContracts, useAppContracts } from '~c
 import { useCreateAntNotificationHolder } from '~common/components/hooks/useAntNotification';
 import { useBurnerFallback } from '~common/components/hooks/useBurnerFallback';
 import { useScaffoldAppProviders } from '~common/components/hooks/useScaffoldAppProviders';
-import { NETWORKS } from '~common/constants';
 import { useScaffoldHooksExamples } from '~~/components/hooks/useScaffoldHooksExamples';
 import {
   BURNER_FALLBACK_ENABLED,
@@ -88,20 +87,19 @@ export const MainPage: FC<IMainPageProps> = (props) => {
   // -----------------------------
 
   // init contracts
-  const yourContract = useAppContracts('YourContract', ethersAppContext.chainId);
-  const yourNFT = useAppContracts('YourNFT', ethersAppContext.chainId);
-  const mainnetDai = useAppContracts('DAI', NETWORKS.mainnet.chainId);
+  const GLD = useAppContracts('GLD', ethersAppContext.chainId);
+  const Vendor = useAppContracts('Vendor', ethersAppContext.chainId);
 
-  // keep track of a variable from the contract in the local React state:
-  const [purpose, update] = useContractReader(
-    yourContract,
-    yourContract?.purpose,
-    [],
-    yourContract?.filters.SetPurpose()
-  );
+  // // keep track of a variable from the contract in the local React state:
+  // const [purpose, update] = useContractReader(
+  //   yourContract,
+  //   yourContract?.purpose,
+  //   [],
+  //   yourContract?.filters.SetPurpose()
+  // );
 
   // 📟 Listen for broadcast events
-  const [setPurposeEvents] = useEventListener(yourContract, 'SetPurpose', 0);
+  // const [setPurposeEvents] = useEventListener(yourContract, 'SetPurpose', 0);
 
   // -----------------------------
   // .... 🎇 End of examples
@@ -121,36 +119,24 @@ export const MainPage: FC<IMainPageProps> = (props) => {
   // This is the list of tabs and their contents
   const pageList: TContractPageList = {
     mainPage: {
-      name: 'YourContract',
+      name: 'GLD',
       content: (
         <GenericContract
-          contractName="YourContract"
-          contract={yourContract}
+          contractName="GLD"
+          contract={GLD}
           mainnetAdaptor={scaffoldAppProviders.mainnetAdaptor}
-          blockExplorer={scaffoldAppProviders.targetNetwork.blockExplorer}
-        />
+          blockExplorer={scaffoldAppProviders.targetNetwork.blockExplorer}></GenericContract>
       ),
     },
     pages: [
       {
-        name: 'YourNFT',
+        name: 'Vendor',
         content: (
           <GenericContract
-            contractName="YourNFT"
-            contract={yourNFT}
+            contractName="Vendor"
+            contract={Vendor}
             mainnetAdaptor={scaffoldAppProviders.mainnetAdaptor}
             blockExplorer={scaffoldAppProviders.targetNetwork.blockExplorer}></GenericContract>
-        ),
-      },
-      {
-        name: 'Mainnet-Dai',
-        content: (
-          <GenericContract
-            contractName="Dai"
-            contract={mainnetDai}
-            mainnetAdaptor={scaffoldAppProviders.mainnetAdaptor}
-            blockExplorer={scaffoldAppProviders.targetNetwork.blockExplorer}
-          />
         ),
       },
     ],
