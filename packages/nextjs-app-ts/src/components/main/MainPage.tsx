@@ -1,6 +1,5 @@
 /* eslint-disable unused-imports/no-unused-vars-ts */
 
-import { GenericContract } from 'eth-components/ant/generic-contract';
 import { useEthersAdaptorFromProviderOrSigners } from 'eth-hooks';
 import { useEthersAppContext } from 'eth-hooks/context';
 import { useDexEthPrice } from 'eth-hooks/dapps';
@@ -112,16 +111,7 @@ export const MainPage: FC<IMainPageProps> = (props) => {
   return (
     <div className="App">
       <Header scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
-      <GenericContract
-        contractName="Vendor"
-        contract={Vendor}
-        mainnetAdaptor={scaffoldAppProviders.mainnetAdaptor}
-        blockExplorer={scaffoldAppProviders.targetNetwork.blockExplorer}></GenericContract>
-      <GenericContract
-        contractName="GLD"
-        contract={GLD}
-        mainnetAdaptor={scaffoldAppProviders.mainnetAdaptor}
-        blockExplorer={scaffoldAppProviders.targetNetwork.blockExplorer}></GenericContract>
+      hi
       <Footer scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
       <div style={{ position: 'absolute' }}>{notificationHolder}</div>
     </div>
