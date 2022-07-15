@@ -26,14 +26,6 @@ export const appContractsConfig = () => {
       // --------------------------------------------------
       // 🙋🏽‍♂️ Add your hadrdhat contracts here
       // --------------------------------------------------
-      YourContract: createConnectorForHardhatContract(
-        'YourContract',
-        hardhatContracts.YourContract__factory,
-        hardhatContractsJson
-      ),
-
-      YourNFT: createConnectorForHardhatContract('YourNFT', hardhatContracts.YourNFT__factory, hardhatContractsJson),
-
       GLD: createConnectorForHardhatContract('GLD', hardhatContracts.GLD__factory, hardhatContractsJson),
       Vendor: createConnectorForHardhatContract('Vendor', hardhatContracts.Vendor__factory, hardhatContractsJson),
 

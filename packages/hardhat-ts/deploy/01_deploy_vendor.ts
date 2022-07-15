@@ -18,6 +18,7 @@ const func: DeployFunction = async (hre: THardhatRuntimeEnvironmentExtended) => 
     args: [gld.address],
     log: true,
   });
+  console.log('DEPLOYER', deployer);
 
   const vendor = await ethers.getContract('Vendor', deployer);
 
