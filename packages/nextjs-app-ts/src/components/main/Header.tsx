@@ -19,7 +19,7 @@ import { IScaffoldAppProviders } from '~common/models';
 import { FAUCET_ENABLED } from '~~/config/app.config';
 
 // displays a page header
-export interface IMainPageHeaderProps {
+export interface IHeaderProps {
   scaffoldAppProviders: IScaffoldAppProviders;
   price: number;
   children?: ReactNode;
@@ -30,7 +30,7 @@ export interface IMainPageHeaderProps {
  * @param props
  * @returns
  */
-export const MainPageHeader: FC<IMainPageHeaderProps> = (props) => {
+export const Header: FC<IHeaderProps> = (props) => {
   const settingsContext = useContext(EthComponentsSettingsContext);
   const ethersAppContext = useEthersAppContext();
   const selectedChainId = ethersAppContext.chainId;

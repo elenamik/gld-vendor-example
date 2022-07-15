@@ -8,7 +8,7 @@ import React, { FC, ReactElement } from 'react';
 import { useLoadAppContracts, useConnectAppContracts, useAppContracts } from '~common/components/context';
 import { useBurnerFallback } from '~common/components/hooks/useBurnerFallback';
 import { useScaffoldAppProviders } from '~common/components/hooks/useScaffoldAppProviders';
-import { MainPageFooter, MainPageHeader } from '~~/components/main';
+import { Footer, Header } from '~~/components/main';
 import {
   BURNER_FALLBACK_ENABLED,
   CONNECT_TO_BURNER_AUTOMATICALLY,
@@ -49,7 +49,7 @@ const Debug: FC<IDebugPageProps> = (props) => {
 
   return (
     <div className="App">
-      <MainPageHeader scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
+      <Header scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
       <GenericContract
         contractName="Vendor"
         contract={Vendor}
@@ -60,7 +60,7 @@ const Debug: FC<IDebugPageProps> = (props) => {
         contract={GLD}
         mainnetAdaptor={scaffoldAppProviders.mainnetAdaptor}
         blockExplorer={scaffoldAppProviders.targetNetwork.blockExplorer}></GenericContract>
-      <MainPageFooter scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
+      <Footer scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
     </div>
   );
 };

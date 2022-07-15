@@ -7,7 +7,7 @@ import { useDexEthPrice } from 'eth-hooks/dapps';
 import { asEthersAdaptor } from 'eth-hooks/functions';
 import React, { FC, ReactElement } from 'react';
 
-import { MainPageFooter, MainPageHeader } from '.';
+import { Footer, Header } from '.';
 
 import { useLoadAppContracts, useConnectAppContracts, useAppContracts } from '~common/components/context';
 import { useCreateAntNotificationHolder } from '~common/components/hooks/useAntNotification';
@@ -111,7 +111,7 @@ export const MainPage: FC<IMainPageProps> = (props) => {
 
   return (
     <div className="App">
-      <MainPageHeader scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
+      <Header scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
       <GenericContract
         contractName="Vendor"
         contract={Vendor}
@@ -122,7 +122,7 @@ export const MainPage: FC<IMainPageProps> = (props) => {
         contract={GLD}
         mainnetAdaptor={scaffoldAppProviders.mainnetAdaptor}
         blockExplorer={scaffoldAppProviders.targetNetwork.blockExplorer}></GenericContract>
-      <MainPageFooter scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
+      <Footer scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
       <div style={{ position: 'absolute' }}>{notificationHolder}</div>
     </div>
   );
