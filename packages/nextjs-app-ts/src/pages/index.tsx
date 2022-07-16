@@ -1,4 +1,5 @@
-import { useEthersAdaptorFromProviderOrSigners } from 'eth-hooks';
+import { Balance } from 'eth-components/ant';
+import { useContractReader, useEthersAdaptorFromProviderOrSigners } from 'eth-hooks';
 import { useEthersAppContext } from 'eth-hooks/context';
 import { useDexEthPrice } from 'eth-hooks/dapps';
 import { asEthersAdaptor } from 'eth-hooks/functions';
@@ -60,6 +61,8 @@ export const MainPage: FC<IMainPageProps> = (props) => {
     ethersAppContext.chainId !== 1 ? scaffoldAppProviders.targetNetwork : undefined
   );
 
+  const [yourBalance] = useContractReader(GLD, GLD?.balanceOf, [ethersAppContext.account ?? '']);
+
   return (
     <div className="App">
       <Header scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
@@ -68,6 +71,9 @@ export const MainPage: FC<IMainPageProps> = (props) => {
         <span className="font-semibold">GLD⚜</span> tokens are fictional ERC20 token hosted on rinkeby.
         <br />
         The exchange rate is 100 GLD for 1 rinkeby ETH.
+      </div>
+      <div>
+        Your Balance: <Balance balance={yourBalance} address={undefined} />
       </div>
       <Footer scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
       <div style={{ position: 'absolute' }}>{notificationHolder}</div>
