@@ -1,11 +1,31 @@
 module.exports = {
-  content: ['./index.html', './pages/**/*.{vue,js,ts,jsx,tsx}', './components/**/*.{vue,js,ts,jsx,tsx}'],
+  content: ['./src/pages/**/*.{vue,js,ts,jsx,tsx}', './src/components/**/*.{vue,js,ts,jsx,tsx}'],
   darkMode: 'class', // or 'media' or 'class'
   important: false,
   corePlugins: {
     preflight: false,
   },
   theme: {
+    fontFamily:{
+      'display': ['Montserrat'],
+      'body': ['Roboto']
+    },
+    colors: {
+      yellow: {
+        DEFAULT: '#F9E978'
+      },
+      gray: {
+        DEFAULT:'#D9D9D9'
+      },
+      brown: {
+        light: '#A49A81',
+        DEFAULT: '#A49A81',
+        dark: '#37271F'
+      },
+      white: {
+        DEFAULT: '#FEFDF7'
+      },
+    },
     extend: {
       extend: {
         /**
