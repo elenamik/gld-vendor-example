@@ -27,6 +27,7 @@ const func: DeployFunction = async (hre: THardhatRuntimeEnvironmentExtended) => 
   await gld.transfer(vendor.address, ethers.utils.parseEther('1000'));
   //
   // await vendor.transferOwnership('0x6631Dc8073B40a4fb1803F9b076E17bD27f05d9D');
+  console.log('DONE');
 };
 export default func;
 func.tags = ['Vendor'];
