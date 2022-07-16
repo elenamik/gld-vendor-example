@@ -63,7 +63,12 @@ export const MainPage: FC<IMainPageProps> = (props) => {
   return (
     <div className="App">
       <Header scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
-      hi
+      <div className="text-3xl font-extrabold font-display">BUY AND SELL GLD TOKENS</div>
+      <div className="">
+        <span className="font-semibold">GLD⚜</span> tokens are fictional ERC20 token hosted on rinkeby.
+        <br />
+        The exchange rate is 100 GLD for 1 rinkeby ETH.
+      </div>
       <Footer scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
       <div style={{ position: 'absolute' }}>{notificationHolder}</div>
     </div>
