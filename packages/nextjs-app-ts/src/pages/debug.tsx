@@ -24,7 +24,7 @@ interface IDebugPageProps {
   children?: ReactElement;
 }
 
-const Debug: FC<IDebugPageProps> = (props) => {
+const Debug: FC<IDebugPageProps> = () => {
   const scaffoldAppProviders = useScaffoldAppProviders({
     targetNetwork: TARGET_NETWORK_INFO,
     connectToBurnerAutomatically: CONNECT_TO_BURNER_AUTOMATICALLY,

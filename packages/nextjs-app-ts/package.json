@@ -61,7 +61,7 @@
     "react-dom": "^18.1.0",
     "react-error-boundary": "^3.1.4",
     "react-qr-reader": "^3.0.0-beta-1",
-    "react-query": "^3.39.1",
+    "react-query": "^3.39.2",
     "react-stack-grid": "^0.7.1",
     "request": "^2.88.2",
     "stream": "^0.0.2",

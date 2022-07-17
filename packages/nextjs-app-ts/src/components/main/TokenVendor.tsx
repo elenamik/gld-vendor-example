@@ -1,7 +1,9 @@
+import { Spin } from 'antd';
 import { useContractReader } from 'eth-hooks';
 import { useEthersAppContext } from 'eth-hooks/context';
 import { ethers } from 'ethers';
 import React, { FC, useState } from 'react';
+import { useMutation } from 'react-query';
 
 import { TransactionInput } from './TransactionInput';
 import { TransactionValue } from './TransactionValue';
@@ -13,6 +15,7 @@ const defaultQuantity = '1';
 
 export const TokenVendor: FC = () => {
   const ethersAppContext = useEthersAppContext();
+
   const GLD = useAppContracts('GLD', ethersAppContext.chainId);
   const Vendor = useAppContracts('Vendor', ethersAppContext.chainId);
 
@@ -22,12 +25,19 @@ export const TokenVendor: FC = () => {
   const [action, setAction] = useState<'BUYING' | 'SELLING'>('BUYING');
   const [buying, setBuying] = useState(false);
 
-  const handleBuyClick = async () => {
-    // TODO: add try catch
-    setBuying(true);
-    const ethCostToPurchaseTokens = ethers.utils.parseEther(`${inputQuantity / tokensPerEth?.toString()}`);
-    await Vendor!.buyTokens({ value: ethCostToPurchaseTokens });
-    setBuying(false);
+  const executeBuy = async () => {};
+  const { mutate: buyGLD, isLoading: buyLoading } = useMutation(
+    async () => {
+      const ethCostToPurchaseTokens = ethers.utils.parseEther(`${inputQuantity / tokensPerEth?.toString()}`);
+      await Vendor!.buyTokens({ value: ethCostToPurchaseTokens });
+    },
+    {
+      onSuccess: () => console.log('hweyo'),
+    }
+  );
+
+  const handleBuyClick = () => {
+    buyGLD();
   };
 
   const handleQuantityChange = (event: { target: { value: string } }): void => {
@@ -75,11 +85,19 @@ export const TokenVendor: FC = () => {
             value={parseFloat(inputQuantity) / parseFloat(tokensPerEth?.toString() ?? defaultQuantity)}
           />
           {action === 'BUYING' ? (
-            <button
-              className="p-1 mt-4 text-lg font-bold border-2 rounded-md font-display w-72"
-              onClick={handleBuyClick}>
-              EXECUTE
-            </button>
+            <div>
+              {!buyLoading ? (
+                <button
+                  className="p-1 mt-4 text-lg font-bold border-2 rounded-md font-display w-72"
+                  onClick={handleBuyClick}>
+                  EXECUTE
+                </button>
+              ) : (
+                <div className="mt-4">
+                  <Spin size="medium" />
+                </div>
+              )}
+            </div>
           ) : (
             <SellButton vendorWrite={Vendor} tokenWrite={GLD} inputQuantity={inputQuantity} />
           )}
