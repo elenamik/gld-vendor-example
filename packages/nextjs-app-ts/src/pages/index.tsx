@@ -82,7 +82,7 @@ export const MainPage: FC<IMainPageProps> = () => {
         </div>
       </div>
 
-      <div id="your-bal" className="px-6 mx-auto my-6 mb-10 bg-gray w-fit rounded-md">
+      <div id="your-bal" className="px-6 mx-auto mt-8 mb-10 bg-gray w-fit rounded-md">
         <div className="flex flex-row items-center px-4 py-2">
           <span className="text-xl font-bold font-display">YOUR BALANCE:</span>
           <div className="font-medium">
