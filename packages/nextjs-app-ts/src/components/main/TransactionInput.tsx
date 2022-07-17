@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-export const TransactionInput: FC<{ unit: string; onChange: any; value: number }> = ({ unit, onChange, value }) => {
+export const TransactionInput: FC<{ unit: string; onChange: any; value: string }> = ({ unit, onChange, value }) => {
   return (
     <div id="quantity-input-container" className="flex flex-row justify-between w-96 bg-yellow">
       <input

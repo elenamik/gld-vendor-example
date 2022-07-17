@@ -1,3 +1,4 @@
+import { useContractReader } from 'eth-hooks';
 import { useEthersAppContext } from 'eth-hooks/context';
 import { ethers } from 'ethers';
 import React, { FC, useState } from 'react';
@@ -8,12 +9,15 @@ import { TransactionValue } from './TransactionValue';
 import { useAppContracts } from '~common/components/context';
 import { Vendor, GLD } from '~common/generated/contract-types';
 
-const defaultQuantity = 1;
+const defaultQuantity = '1';
 
 export const TokenVendor: FC = () => {
   const ethersAppContext = useEthersAppContext();
   const GLD = useAppContracts('GLD', ethersAppContext.chainId);
   const Vendor = useAppContracts('Vendor', ethersAppContext.chainId);
+
+  const [tokensPerEth] = useContractReader(Vendor, Vendor?.tokensPerEth);
+  console.log(tokensPerEth?.toString());
 
   const [inputQuantity, setInputQuantity] = useState(defaultQuantity);
   const [action, setAction] = useState<'BUYING' | 'SELLING'>('BUYING');
@@ -22,8 +26,8 @@ export const TokenVendor: FC = () => {
   const handleBuyClick = async () => {
     // TODO: add try catch
     setBuying(true);
-    const tokensPerEth = await Vendor!.tokensPerEth();
-    const ethCostToPurchaseTokens = ethers.utils.parseEther(`${inputQuantity / parseFloat(tokensPerEth.toString())}`);
+    const ethCostToPurchaseTokens = ethers.utils.parseEther(`${inputQuantity / tokensPerEth?.toString()}`);
+    console.log('eth to purchase', ethCostToPurchaseTokens);
     await Vendor!.buyTokens({ value: ethCostToPurchaseTokens });
     setBuying(false);
   };
@@ -44,7 +48,7 @@ export const TokenVendor: FC = () => {
           <button
             onClick={(): void => {
               setAction('BUYING');
-              setInputQuantity(1);
+              setInputQuantity(defaultQuantity);
             }}
             className={
               'flex-grow px-10 py-4 text-2xl font-bold text-center border-2 border-b-0 font-display rounded-t-2xl ' +
@@ -55,7 +59,7 @@ export const TokenVendor: FC = () => {
           <button
             onClick={(): void => {
               setAction('SELLING');
-              setInputQuantity(1);
+              setInputQuantity(defaultQuantity);
             }}
             className={
               'flex-grow px-10 py-4 text-2xl font-bold text-center border-2 border-b-0 font-display rounded-t-2xl ' +
@@ -69,7 +73,10 @@ export const TokenVendor: FC = () => {
           className="flex flex-col items-center w-full py-4 bg-white border-2 rounded-b-xl">
           <TransactionInput unit="GLD" onChange={handleQuantityChange} value={inputQuantity} />
           <div className="p-2 text-lg">⚜️ FOR ⚜️</div>
-          <TransactionValue unit="ETH" value={inputQuantity / 100} />
+          <TransactionValue
+            unit="ETH"
+            value={parseFloat(inputQuantity) / parseFloat(tokensPerEth?.toString() ?? defaultQuantity)}
+          />
           {action === 'BUYING' ? (
             <button
               className="p-1 mt-4 text-lg font-bold border-2 rounded-md font-display w-72"
@@ -97,7 +104,6 @@ export const SellButton: FC<{
     setApproved(true);
   };
   const handleSell = async () => {
-    console.log(inputQuantity, ethers.utils.parseEther(inputQuantity));
     await vendorWrite!.sellTokens(ethers.utils.parseEther(inputQuantity));
     setApproved(false);
   };
