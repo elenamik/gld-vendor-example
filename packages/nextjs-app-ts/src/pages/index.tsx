@@ -1,6 +1,6 @@
 import { Balance } from 'eth-components/ant';
 import { useBalance, useContractReader, useEthersAdaptorFromProviderOrSigners, useEventListener } from 'eth-hooks';
-import { useEthersAppContext } from 'eth-hooks/context';
+import { useEthersAppContext, useBlockNumberContext } from 'eth-hooks/context';
 import { useDexEthPrice } from 'eth-hooks/dapps';
 import { asEthersAdaptor } from 'eth-hooks/functions';
 import React, { FC, ReactElement } from 'react';
@@ -49,6 +49,8 @@ export const MainPage: FC<IMainPageProps> = (props) => {
   const ethersAppContext = useEthersAppContext();
   useBurnerFallback(scaffoldAppProviders, BURNER_FALLBACK_ENABLED);
 
+  const block = useBlockNumberContext();
+  console.log('BLOCK', block);
   useLoadAppContracts();
   const [mainnetAdaptor] = useEthersAdaptorFromProviderOrSigners(MAINNET_PROVIDER);
   useConnectAppContracts(mainnetAdaptor);
@@ -68,7 +70,6 @@ export const MainPage: FC<IMainPageProps> = (props) => {
 
   const [buyEvents] = useEventListener(Vendor, 'BuyTokens', 0);
   const [sellEvents] = useEventListener(Vendor, 'SellTokens', 0);
-  console.log(buyEvents);
 
   return (
     <div className="App">
