@@ -56,8 +56,7 @@ export const MainPage: FC<IMainPageProps> = () => {
 
   const GLD = useAppContracts('GLD', ethersAppContext.chainId);
   const Vendor = useAppContracts('Vendor', ethersAppContext.chainId);
-
-  console.log('contracts', GLD, Vendor);
+  const [tokensPerEth] = useContractReader(Vendor, Vendor?.tokensPerEth);
 
   const [ethPrice] = useDexEthPrice(
     scaffoldAppProviders.mainnetAdaptor?.provider,
@@ -74,16 +73,16 @@ export const MainPage: FC<IMainPageProps> = () => {
   return (
     <div className="App">
       <Header scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
-      <div id="hero" className="mb-6">
-        <div className="text-3xl font-extrabold font-display">BUY AND SELL GLD TOKENS</div>
-        <div>
+      <div id="hero" className="my-6">
+        <div className="text-5xl font-black font-display">BUY AND SELL GLD TOKENS</div>
+        <div className="mt-2 text-lg">
           <span className="font-semibold">GLD⚜</span> tokens are fictional ERC20 token hosted on rinkeby.
           <br />
-          The exchange rate is 100 GLD for 1 Goerli ETH.
+          The exchange rate is {tokensPerEth?.toString() ?? 'NaN'} GLD for 1 Goerli ETH.
         </div>
       </div>
 
-      <div id="your-bal" className="px-6 mx-auto my-6 bg-gray w-fit rounded-md">
+      <div id="your-bal" className="px-6 mx-auto my-3 bg-gray w-fit rounded-md">
         <div className="flex flex-row items-center px-4 py-2">
           <span className="text-xl font-bold font-display">YOUR BALANCE:</span>
           <div className="font-medium">
@@ -92,10 +91,10 @@ export const MainPage: FC<IMainPageProps> = () => {
           <span className="text-xl font-bold font-display">GLD ⚜️</span>
         </div>
       </div>
-      <div id="vendor" className="py-3">
+      <div id="vendor" className="mt-6 mb-3">
         {ethersAppContext.active && <TokenVendor />}
       </div>
-      <div id="vendor-balances" className="py-2">
+      <div id="vendor-balances" className="py-3">
         <span id="info-text" className="text-xl font-bold font-display">
           THE VENDOR CURRENTLY HOLDS:
         </span>
@@ -111,9 +110,9 @@ export const MainPage: FC<IMainPageProps> = () => {
           </div>
         </div>
       </div>
-      <div className="w-full">
-        <ViewEvents sellEvents={sellEvents} buyEvents={buyEvents} />
-      </div>
+
+      <ViewEvents sellEvents={sellEvents} buyEvents={buyEvents} />
+
       <Footer scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
       <div style={{ position: 'absolute' }}>{notificationHolder}</div>
     </div>

@@ -43,7 +43,7 @@ export const Header: FC<IHeaderProps> = (props) => {
   /**
    * this shows the page header and other informaiton
    */
-  const left = <div className="p-16" />;
+  const left = <div className="p-12" />;
 
   const onLoginError = useCallback(
     (e: Error) => {
