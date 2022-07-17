@@ -1,9 +1,11 @@
-const INFURA_ID = process.env.VITE_RPC_MAINNET_INFURA;
-
+let INFURA_ID = process.env.VITE_RPC_MAINNET_INFURA;
+INFURA_ID = 'd71eabeac3254a7aab1dac1a743869e7';
 let hostname = 'localhost';
 if (typeof window !== 'undefined' && window != null) {
   hostname = window?.location?.hostname ?? 'localhost';
 }
+
+console.log('INF ID', INFURA_ID);
 
 export const NETWORKS = {
   localhost: {

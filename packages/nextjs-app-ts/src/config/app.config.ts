@@ -46,6 +46,7 @@ invariant.log('env:dev', isDev);
  */
 
 const targetNetwork: TNetworkNames = process.env.NEXT_PUBLIC_TARGET_NETWORK as TNetworkNames;
+console.log('T NETWORK', targetNetwork);
 invariant.log('NEXT_PUBLIC_TARGET_NETWORK', process.env.NEXT_PUBLIC_TARGET_NETWORK);
 invariant(NETWORKS[targetNetwork] != null, `Invalid target network: ${targetNetwork}`);
 

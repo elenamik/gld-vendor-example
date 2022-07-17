@@ -38,8 +38,6 @@ if (process.env.BUILDING !== 'true') {
 /**
  * Set your target network!!!
  */
-console.log('HARDHAT_TARGET_NETWORK: ', process.env.HARDHAT_TARGET_NETWORK);
-
 /**
  * loads network list and config from '@scaffold-eth/common/src
  */

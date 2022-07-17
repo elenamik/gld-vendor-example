@@ -18,9 +18,11 @@ export const TokenVendor: FC = () => {
 
   const GLD = useAppContracts('GLD', ethersAppContext.chainId);
   const Vendor = useAppContracts('Vendor', ethersAppContext.chainId);
+  console.log('CONTRACTS', GLD, Vendor);
 
   const [tokensPerEth] = useContractReader(Vendor, Vendor?.tokensPerEth);
 
+  console.log('toks', tokensPerEth);
   const [inputQuantity, setInputQuantity] = useState(defaultQuantity);
   const [action, setAction] = useState<'BUYING' | 'SELLING'>('BUYING');
 

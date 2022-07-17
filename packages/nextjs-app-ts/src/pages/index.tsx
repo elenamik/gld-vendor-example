@@ -45,6 +45,8 @@ export const MainPage: FC<IMainPageProps> = () => {
     mainnetProvider: MAINNET_PROVIDER,
     infuraId: INFURA_ID,
   });
+  console.log('network stuff', TARGET_NETWORK_INFO, LOCAL_PROVIDER);
+  console.log('providers', scaffoldAppProviders);
 
   const ethersAppContext = useEthersAppContext();
   useBurnerFallback(scaffoldAppProviders, BURNER_FALLBACK_ENABLED);
