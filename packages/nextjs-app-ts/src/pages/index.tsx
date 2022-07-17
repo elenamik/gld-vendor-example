@@ -68,7 +68,6 @@ export const MainPage: FC<IMainPageProps> = (props) => {
 
   const [buyEvents] = useEventListener(Vendor, 'BuyTokens', 0);
   const [sellEvents] = useEventListener(Vendor, 'SellTokens', 0);
-  console.log(buyEvents);
 
   return (
     <div className="App">
