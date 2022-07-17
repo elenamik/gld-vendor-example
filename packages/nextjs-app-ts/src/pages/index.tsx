@@ -56,6 +56,7 @@ export const MainPage: FC<IMainPageProps> = () => {
 
   const GLD = useAppContracts('GLD', ethersAppContext.chainId);
   const Vendor = useAppContracts('Vendor', ethersAppContext.chainId);
+  const [tokensPerEth] = useContractReader(Vendor, Vendor?.tokensPerEth);
 
   const [ethPrice] = useDexEthPrice(
     scaffoldAppProviders.mainnetAdaptor?.provider,
@@ -72,27 +73,46 @@ export const MainPage: FC<IMainPageProps> = () => {
   return (
     <div className="App">
       <Header scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
-      <div className="text-3xl font-extrabold font-display">BUY AND SELL GLD TOKENS</div>
-      <div>
-        <span className="font-semibold">GLD⚜</span> tokens are fictional ERC20 token hosted on rinkeby.
-        <br />
-        The exchange rate is 100 GLD for 1 Goerli ETH.
-      </div>
-      <div>
-        Your Balance: <Balance balance={yourGLD} address={undefined} /> GLD ⚜
-      </div>
-      {ethersAppContext.active && <TokenVendor />}
-      <div>
-        <span className="text-xl font-bold font-display">THE VENDOR CURRENTLY HOLDS:</span>
-        <div className="flex flex-row">
-          <Balance balance={vendorEth} address={undefined} /> ETH
+      <div id="hero" className="my-6">
+        <div className="text-5xl font-black font-display">BUY AND SELL GLD TOKENS</div>
+        <div className="mt-2 text-lg">
+          <span className="font-semibold">GLD⚜</span> tokens are fictional ERC20 token hosted on rinkeby.
           <br />
-          <Balance balance={vendorGLD} address={undefined} /> GLD
+          The exchange rate is {tokensPerEth?.toString() ?? 'NaN'} GLD for 1 Goerli ETH.
         </div>
       </div>
-      <div className="w-full">
-        <ViewEvents sellEvents={sellEvents} buyEvents={buyEvents} />
+
+      <div id="your-bal" className="px-6 mx-auto mt-8 mb-10 bg-gray w-fit rounded-md">
+        <div className="flex flex-row items-center px-4 py-2">
+          <span className="text-xl font-bold font-display">YOUR BALANCE:</span>
+          <div className="font-medium">
+            <Balance balance={yourGLD} address={undefined} fontSize={20} />
+          </div>
+          <span className="text-xl font-bold font-display">GLD ⚜️</span>
+        </div>
       </div>
+      <div id="vendor" className="my-6">
+        {ethersAppContext.active && <TokenVendor />}
+      </div>
+      <div id="vendor-balances" className="py-6">
+        <span id="info-text" className="text-xl font-bold font-display">
+          THE VENDOR CURRENTLY HOLDS:
+        </span>
+        <div id="bals" className="flex flex-row justify-center">
+          <div id="eth-bal" className="flex flex-row items-center px-3 mx-6 text-2xl p bg-yellow">
+            <Balance balance={vendorEth} address={undefined} />
+            <span>ETH</span>
+          </div>
+          <br />
+          <div id="gld-bal" className="flex flex-row items-center px-3 mx-6 text-2xl font-body p bg-yellow">
+            <Balance balance={vendorGLD} address={undefined} />
+            <span>GLD</span>
+          </div>
+        </div>
+      </div>
+
+      <ViewEvents sellEvents={sellEvents} buyEvents={buyEvents} />
+
       <Footer scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
       <div style={{ position: 'absolute' }}>{notificationHolder}</div>
     </div>

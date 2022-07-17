@@ -1,5 +1,5 @@
 import { getNetwork } from '@ethersproject/networks';
-import { Alert, PageHeader } from 'antd';
+import { Alert } from 'antd';
 import { Account } from 'eth-components/ant';
 import { EthComponentsSettingsContext } from 'eth-components/models';
 import { useGasPrice } from 'eth-hooks';
@@ -43,14 +43,7 @@ export const Header: FC<IHeaderProps> = (props) => {
   /**
    * this shows the page header and other informaiton
    */
-  const left = (
-    <>
-      <div>
-        <PageHeader title="Page Header" />
-      </div>
-      {props.children}
-    </>
-  );
+  const left = <div className="p-12" />;
 
   const onLoginError = useCallback(
     (e: Error) => {
