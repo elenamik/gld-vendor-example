@@ -1,10 +1,8 @@
 module.exports = {
   content: ['./src/pages/**/*.{vue,js,ts,jsx,tsx}', './src/components/**/*.{vue,js,ts,jsx,tsx}'],
   darkMode: 'class', // or 'media' or 'class'
+  mode:'jit',
   important: false,
-  corePlugins: {
-    preflight: false,
-  },
   theme: {
     fontFamily:{
       'display': ['Montserrat'],
@@ -50,11 +48,5 @@ module.exports = {
       // ...
       borderWidth: ['hover', 'focus'],
     },
-  },
-  plugins: [require('daisyui')],
-  daisyui: {
-    darkTheme: 'business',
-    themes: ['light', 'luxury', 'business', 'haloween'],
-    prefix: 'daisy',
-  },
+  }
 };

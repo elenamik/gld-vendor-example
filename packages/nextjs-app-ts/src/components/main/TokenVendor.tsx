@@ -1,27 +1,30 @@
+import { useEthersAppContext } from 'eth-hooks/context';
 import { ethers } from 'ethers';
 import React, { FC, useState } from 'react';
 
 import { TransactionInput } from './TransactionInput';
 import { TransactionValue } from './TransactionValue';
 
-import { Vendor, YourToken as YourTokenContract } from '~~/generated/contract-types';
+import { useAppContracts } from '~common/components/context';
+import { Vendor, GLD } from '~common/generated/contract-types';
 
 const defaultQuantity = 1;
 
-export const TokenVendor: FC<{
-  vendorWrite: Vendor;
-  tokenWrite: YourTokenContract;
-}> = ({ vendorWrite, tokenWrite }) => {
+export const TokenVendor: FC = () => {
+  const ethersAppContext = useEthersAppContext();
+  const GLD = useAppContracts('GLD', ethersAppContext.chainId);
+  const Vendor = useAppContracts('Vendor', ethersAppContext.chainId);
+
   const [inputQuantity, setInputQuantity] = useState(defaultQuantity);
   const [action, setAction] = useState<'BUYING' | 'SELLING'>('BUYING');
   const [buying, setBuying] = useState(false);
 
-  // @ts-ignore
-  const handleBuyClick = async (): void => {
+  const handleBuyClick = async () => {
+    // TODO: add try catch
     setBuying(true);
-    const tokensPerEth = await vendorWrite.tokensPerEth();
+    const tokensPerEth = await Vendor!.tokensPerEth();
     const ethCostToPurchaseTokens = ethers.utils.parseEther(`${inputQuantity / parseFloat(tokensPerEth.toString())}`);
-    await vendorWrite.buyTokens({ value: ethCostToPurchaseTokens });
+    await Vendor!.buyTokens({ value: ethCostToPurchaseTokens });
     setBuying(false);
   };
 
@@ -74,7 +77,7 @@ export const TokenVendor: FC<{
               EXECUTE
             </button>
           ) : (
-            <SellButton vendorWrite={vendorWrite} tokenWrite={tokenWrite} inputQuantity={inputQuantity} />
+            <SellButton vendorWrite={Vendor} tokenWrite={GLD} inputQuantity={inputQuantity} />
           )}
         </div>
       </div>
@@ -83,19 +86,19 @@ export const TokenVendor: FC<{
 };
 
 export const SellButton: FC<{
-  vendorWrite: Vendor;
-  tokenWrite: YourTokenContract;
+  vendorWrite?: Vendor;
+  tokenWrite?: GLD;
   inputQuantity: string;
 }> = ({ vendorWrite, tokenWrite, inputQuantity }) => {
   const [approved, setApproved] = useState(false);
 
   const handleApprove = async () => {
-    await tokenWrite.approve(vendorWrite.address, ethers.utils.parseEther(inputQuantity));
+    await tokenWrite!.approve(vendorWrite!.address, ethers.utils.parseEther(inputQuantity));
     setApproved(true);
   };
   const handleSell = async () => {
     console.log(inputQuantity, ethers.utils.parseEther(inputQuantity));
-    await vendorWrite.sellTokens(ethers.utils.parseEther(inputQuantity));
+    await vendorWrite!.sellTokens(ethers.utils.parseEther(inputQuantity));
     setApproved(false);
   };
 

@@ -1,5 +1,5 @@
 import { Balance } from 'eth-components/ant';
-import { useBalance, useContractReader, useEthersAdaptorFromProviderOrSigners } from 'eth-hooks';
+import { useBalance, useContractReader, useEthersAdaptorFromProviderOrSigners, useEventListener } from 'eth-hooks';
 import { useEthersAppContext } from 'eth-hooks/context';
 import { useDexEthPrice } from 'eth-hooks/dapps';
 import { asEthersAdaptor } from 'eth-hooks/functions';
@@ -11,6 +11,8 @@ import { useBurnerFallback } from '~common/components/hooks/useBurnerFallback';
 import { useScaffoldAppProviders } from '~common/components/hooks/useScaffoldAppProviders';
 import { Footer } from '~~/components/common/Footer';
 import { Header } from '~~/components/common/Header';
+import { TokenVendor } from '~~/components/main/TokenVendor';
+import { ViewEvents } from '~~/components/main/ViewEvents';
 import {
   BURNER_FALLBACK_ENABLED,
   CONNECT_TO_BURNER_AUTOMATICALLY,
@@ -44,7 +46,6 @@ export const MainPage: FC<IMainPageProps> = (props) => {
     infuraId: INFURA_ID,
   });
 
-  // 🦊 Get your web3 ethers context from current providers
   const ethersAppContext = useEthersAppContext();
   useBurnerFallback(scaffoldAppProviders, BURNER_FALLBACK_ENABLED);
 
@@ -62,10 +63,12 @@ export const MainPage: FC<IMainPageProps> = (props) => {
   );
 
   const [yourGLD] = useContractReader(GLD, GLD?.balanceOf, [ethersAppContext.account ?? '']);
-  console.log('App context', ethersAppContext.account);
   const [vendorEth] = useBalance(Vendor?.address ?? '');
-  console.log('Vendor ADDR', Vendor);
   const [vendorGLD] = useContractReader(GLD, GLD?.balanceOf, [Vendor?.address ?? '']);
+
+  const [buyEvents] = useEventListener(Vendor, 'BuyTokens', 0);
+  const [sellEvents] = useEventListener(Vendor, 'SellTokens', 0);
+  console.log(buyEvents);
 
   return (
     <div className="App">
@@ -79,6 +82,7 @@ export const MainPage: FC<IMainPageProps> = (props) => {
       <div>
         Your Balance: <Balance balance={yourGLD} address={undefined} /> GLD ⚜
       </div>
+      {ethersAppContext.active && <TokenVendor />}
       <div>
         <span className="text-xl font-bold font-display">THE VENDOR CURRENTLY HOLDS:</span>
         <div className="flex flex-row">
@@ -86,6 +90,9 @@ export const MainPage: FC<IMainPageProps> = (props) => {
           <br />
           <Balance balance={vendorGLD} address={undefined} /> GLD
         </div>
+      </div>
+      <div className="w-full">
+        <ViewEvents sellEvents={sellEvents} buyEvents={buyEvents} />
       </div>
       <Footer scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
       <div style={{ position: 'absolute' }}>{notificationHolder}</div>
