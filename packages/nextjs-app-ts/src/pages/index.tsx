@@ -36,7 +36,7 @@ interface IMainPageProps {
   children?: ReactElement;
 }
 
-export const MainPage: FC<IMainPageProps> = (props) => {
+export const MainPage: FC<IMainPageProps> = () => {
   const notificationHolder = useCreateAntNotificationHolder();
   const scaffoldAppProviders = useScaffoldAppProviders({
     targetNetwork: TARGET_NETWORK_INFO,
@@ -65,8 +65,11 @@ export const MainPage: FC<IMainPageProps> = (props) => {
   );
 
   const [yourGLD] = useContractReader(GLD, GLD?.balanceOf, [ethersAppContext.account ?? '']);
-  const [vendorEth] = useBalance(Vendor?.address ?? '');
+  const [vendorEth] = useBalance(Vendor?.address ?? '', {
+    blockNumberInterval: 1,
+  });
   const [vendorGLD] = useContractReader(GLD, GLD?.balanceOf, [Vendor?.address ?? '']);
+  const [tokensPerEth] = useContractReader(Vendor, Vendor?.tokensPerEth, []);
 
   const [buyEvents] = useEventListener(Vendor, 'BuyTokens', 0);
   const [sellEvents] = useEventListener(Vendor, 'SellTokens', 0);
@@ -78,7 +81,7 @@ export const MainPage: FC<IMainPageProps> = (props) => {
       <div>
         <span className="font-semibold">GLD⚜</span> tokens are fictional ERC20 token hosted on rinkeby.
         <br />
-        The exchange rate is 100 GLD for 1 Goerli ETH.
+        The exchange rate is {tokensPerEth?.toString() ?? 1} GLD for 1 Test ETH.
       </div>
       <div>
         Your Balance: <Balance balance={yourGLD} address={undefined} /> GLD ⚜
