@@ -61,8 +61,10 @@ export const MainPage: FC<IMainPageProps> = (props) => {
     ethersAppContext.chainId !== 1 ? scaffoldAppProviders.targetNetwork : undefined
   );
 
-  const [yourBalance] = useContractReader(GLD, GLD?.balanceOf, [ethersAppContext.account ?? '']);
+  const [yourGLD] = useContractReader(GLD, GLD?.balanceOf, [ethersAppContext.account ?? '']);
+  console.log('App context', ethersAppContext.account);
   const [vendorEth] = useBalance(Vendor?.address ?? '');
+  console.log('Vendor ADDR', Vendor);
   const [vendorGLD] = useContractReader(GLD, GLD?.balanceOf, [Vendor?.address ?? '']);
 
   return (
@@ -72,10 +74,10 @@ export const MainPage: FC<IMainPageProps> = (props) => {
       <div>
         <span className="font-semibold">GLD⚜</span> tokens are fictional ERC20 token hosted on rinkeby.
         <br />
-        The exchange rate is 100 GLD for 1 rinkeby ETH.
+        The exchange rate is 100 GLD for 1 Goerli ETH.
       </div>
       <div>
-        Your Balance: <Balance balance={yourBalance} address={undefined} />
+        Your Balance: <Balance balance={yourGLD} address={undefined} /> GLD ⚜
       </div>
       <div>
         <span className="text-xl font-bold font-display">THE VENDOR CURRENTLY HOLDS:</span>
