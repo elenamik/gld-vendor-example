@@ -18,19 +18,24 @@ export const ViewEvents: FC<{ buyEvents: TxnEvent[]; sellEvents: TxnEvent[] }> =
     return n1.blockNumber - n2.blockNumber;
   });
 
-  const colDefs = ['Address', 'TXN', 'TOKENS', 'VALUE'];
+  const colDefs = ['ADDRESS', 'TXN', 'TOKENS', 'VALUE'];
 
   const headers = colDefs.map((title: string) => {
-    return <th key={title}>{title}</th>;
+    return (
+      <th className="px-6 text-xl font-medium opacity-70 text-brown font-body" key={title}>
+        {title}
+        <div className="w-32 border-t-2 border-color-brown" />
+      </th>
+    );
   });
 
   const Row: React.FC<{ event: TxnEvent }> = ({ event }) => {
     return (
       <tr>
-        <td>{formatDisplayAddress(event.args[0])}</td>
-        <td>{event.event === 'BuyTokens' ? 'BOUGHT' : 'SOLD'}</td>
-        <td>{formatEther(BigNumber.from(event.args[2]))} GLD ⚜️ </td>
-        <td>{formatEther(BigNumber.from(event.args[1]))} ETH♦ </td>
+        <td className="py-2 text-lg">{formatDisplayAddress(event.args[0])}</td>
+        <td className="py-2 text-lg">{event.event === 'BuyTokens' ? 'BOUGHT' : 'SOLD'}</td>
+        <td className="py-2 text-lg">{formatEther(BigNumber.from(event.args[2]))} GLD ⚜️ </td>
+        <td className="py-2 text-lg">{formatEther(BigNumber.from(event.args[1]))} ETH ♦ </td>
       </tr>
     );
   };
@@ -41,12 +46,17 @@ export const ViewEvents: FC<{ buyEvents: TxnEvent[]; sellEvents: TxnEvent[] }> =
 
   if (sortedEvents)
     return (
-      <table className="table-auto">
-        <thead>
-          <tr>{headers}</tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </table>
+      <div className="flex flex-col items-center py-6">
+        <span id="info-text" className="text-xl font-bold font-display">
+          VENDOR TRANSACTION HISTORY:
+        </span>
+        <table className="table-auto">
+          <thead>
+            <tr>{headers}</tr>
+          </thead>
+          <tbody>{rows}</tbody>
+        </table>
+      </div>
     );
   else return <></>;
 };
