@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     fontFamily:{
       'display': ['Montserrat'],
-      'body': ['Roboto']
+      'body': ['Open Sans']
     },
     colors: {
       yellow: {

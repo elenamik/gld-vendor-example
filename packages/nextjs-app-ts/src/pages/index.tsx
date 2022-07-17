@@ -84,21 +84,31 @@ export const MainPage: FC<IMainPageProps> = () => {
       </div>
 
       <div id="your-bal" className="px-6 mx-auto my-6 bg-gray w-fit rounded-md">
-        <div className="flex flex-row items-middle">
-          <span className="my-auto text-xl font-bold font-display">YOUR BALANCE:</span>
-          <Balance balance={yourGLD} address={undefined} fontSize={20} />
-          <span className="my-auto text-xl font-bold font-display">GLD ⚜️</span>
+        <div className="flex flex-row items-center px-4 py-2">
+          <span className="text-xl font-bold font-display">YOUR BALANCE:</span>
+          <div className="font-medium">
+            <Balance balance={yourGLD} address={undefined} fontSize={20} />
+          </div>
+          <span className="text-xl font-bold font-display">GLD ⚜️</span>
         </div>
       </div>
       <div id="vendor" className="py-3">
         {ethersAppContext.active && <TokenVendor />}
       </div>
       <div id="vendor-balances" className="py-2">
-        <span className="text-xl font-bold font-display">THE VENDOR CURRENTLY HOLDS:</span>
-        <div className="flex flex-row justify-center">
-          <Balance balance={vendorEth} address={undefined} /> ETH
+        <span id="info-text" className="text-xl font-bold font-display">
+          THE VENDOR CURRENTLY HOLDS:
+        </span>
+        <div id="bals" className="flex flex-row justify-center">
+          <div id="eth-bal" className="flex flex-row items-center px-3 mx-6 text-2xl p bg-yellow">
+            <Balance balance={vendorEth} address={undefined} />
+            <span>ETH</span>
+          </div>
           <br />
-          <Balance balance={vendorGLD} address={undefined} /> GLD
+          <div id="gld-bal" className="flex flex-row items-center px-3 mx-6 text-2xl font-body p bg-yellow">
+            <Balance balance={vendorGLD} address={undefined} />
+            <span>GLD</span>
+          </div>
         </div>
       </div>
       <div className="w-full">
