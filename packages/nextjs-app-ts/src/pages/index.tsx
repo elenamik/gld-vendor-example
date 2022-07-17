@@ -57,6 +57,8 @@ export const MainPage: FC<IMainPageProps> = () => {
   const GLD = useAppContracts('GLD', ethersAppContext.chainId);
   const Vendor = useAppContracts('Vendor', ethersAppContext.chainId);
 
+  console.log('contracts', GLD, Vendor);
+
   const [ethPrice] = useDexEthPrice(
     scaffoldAppProviders.mainnetAdaptor?.provider,
     ethersAppContext.chainId !== 1 ? scaffoldAppProviders.targetNetwork : undefined
@@ -72,19 +74,28 @@ export const MainPage: FC<IMainPageProps> = () => {
   return (
     <div className="App">
       <Header scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
-      <div className="text-3xl font-extrabold font-display">BUY AND SELL GLD TOKENS</div>
-      <div>
-        <span className="font-semibold">GLD⚜</span> tokens are fictional ERC20 token hosted on rinkeby.
-        <br />
-        The exchange rate is 100 GLD for 1 Goerli ETH.
+      <div id="hero" className="mb-6">
+        <div className="text-3xl font-extrabold font-display">BUY AND SELL GLD TOKENS</div>
+        <div>
+          <span className="font-semibold">GLD⚜</span> tokens are fictional ERC20 token hosted on rinkeby.
+          <br />
+          The exchange rate is 100 GLD for 1 Goerli ETH.
+        </div>
       </div>
-      <div>
-        Your Balance: <Balance balance={yourGLD} address={undefined} /> GLD ⚜
+
+      <div id="your-bal" className="px-6 mx-auto my-6 bg-gray w-fit rounded-md">
+        <div className="flex flex-row items-middle">
+          <span className="my-auto text-xl font-bold font-display">YOUR BALANCE:</span>
+          <Balance balance={yourGLD} address={undefined} fontSize={20} />
+          <span className="my-auto text-xl font-bold font-display">GLD ⚜️</span>
+        </div>
       </div>
-      {ethersAppContext.active && <TokenVendor />}
-      <div>
+      <div id="vendor" className="py-3">
+        {ethersAppContext.active && <TokenVendor />}
+      </div>
+      <div id="vendor-balances" className="py-2">
         <span className="text-xl font-bold font-display">THE VENDOR CURRENTLY HOLDS:</span>
-        <div className="flex flex-row">
+        <div className="flex flex-row justify-center">
           <Balance balance={vendorEth} address={undefined} /> ETH
           <br />
           <Balance balance={vendorGLD} address={undefined} /> GLD
