@@ -26,8 +26,6 @@ contract Vendor is Ownable {
   }
 
   function sellTokens(uint256 _tokens) public {
-    console.log("tokens iz", _tokens);
-
     require(_tokens > 0, "Need to sell a nonzero amount");
     uint256 ethToTransferToSeller = _tokens / tokensPerEth;
 

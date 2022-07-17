@@ -17,7 +17,6 @@ export const TokenVendor: FC = () => {
   const Vendor = useAppContracts('Vendor', ethersAppContext.chainId);
 
   const [tokensPerEth] = useContractReader(Vendor, Vendor?.tokensPerEth);
-  console.log(tokensPerEth?.toString());
 
   const [inputQuantity, setInputQuantity] = useState(defaultQuantity);
   const [action, setAction] = useState<'BUYING' | 'SELLING'>('BUYING');
@@ -27,7 +26,6 @@ export const TokenVendor: FC = () => {
     // TODO: add try catch
     setBuying(true);
     const ethCostToPurchaseTokens = ethers.utils.parseEther(`${inputQuantity / tokensPerEth?.toString()}`);
-    console.log('eth to purchase', ethCostToPurchaseTokens);
     await Vendor!.buyTokens({ value: ethCostToPurchaseTokens });
     setBuying(false);
   };
@@ -36,7 +34,6 @@ export const TokenVendor: FC = () => {
     const re = /^[0-9\b]+$/;
     const val = event.target.value;
     if (val === '' || re.test(val)) {
-      // TODO: deal with string / big number typing on this.
       setInputQuantity(val);
     }
   };
