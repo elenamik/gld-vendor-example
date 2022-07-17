@@ -7,10 +7,7 @@ const func: DeployFunction = async (hre: THardhatRuntimeEnvironmentExtended) => 
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  // You might need the previously deployed yourToken:
   const gld = await ethers.getContract('GLD', deployer);
-
-  // Todo: deploy the vendor
 
   await deploy('Vendor', {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
@@ -18,14 +15,12 @@ const func: DeployFunction = async (hre: THardhatRuntimeEnvironmentExtended) => 
     args: [gld.address],
     log: true,
   });
-  console.log('DEPLOYER', deployer);
 
   const vendor = await ethers.getContract('Vendor', deployer);
 
-  // Todo: transfer the tokens to the vendor
   console.log('\n 🏵  Sending all 1000 tokens to the vendor...\n');
   await gld.transfer(vendor.address, ethers.utils.parseEther('1000'));
-  //
+
   // await vendor.transferOwnership('0x6631Dc8073B40a4fb1803F9b076E17bD27f05d9D');
 };
 export default func;

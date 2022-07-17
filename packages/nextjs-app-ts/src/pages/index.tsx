@@ -1,5 +1,5 @@
 import { Balance } from 'eth-components/ant';
-import { useContractReader, useEthersAdaptorFromProviderOrSigners } from 'eth-hooks';
+import { useBalance, useContractReader, useEthersAdaptorFromProviderOrSigners, useEventListener } from 'eth-hooks';
 import { useEthersAppContext } from 'eth-hooks/context';
 import { useDexEthPrice } from 'eth-hooks/dapps';
 import { asEthersAdaptor } from 'eth-hooks/functions';
@@ -11,6 +11,8 @@ import { useBurnerFallback } from '~common/components/hooks/useBurnerFallback';
 import { useScaffoldAppProviders } from '~common/components/hooks/useScaffoldAppProviders';
 import { Footer } from '~~/components/common/Footer';
 import { Header } from '~~/components/common/Header';
+import { TokenVendor } from '~~/components/main/TokenVendor';
+import { ViewEvents } from '~~/components/main/ViewEvents';
 import {
   BURNER_FALLBACK_ENABLED,
   CONNECT_TO_BURNER_AUTOMATICALLY,
@@ -44,7 +46,6 @@ export const MainPage: FC<IMainPageProps> = (props) => {
     infuraId: INFURA_ID,
   });
 
-  // 🦊 Get your web3 ethers context from current providers
   const ethersAppContext = useEthersAppContext();
   useBurnerFallback(scaffoldAppProviders, BURNER_FALLBACK_ENABLED);
 
@@ -61,19 +62,37 @@ export const MainPage: FC<IMainPageProps> = (props) => {
     ethersAppContext.chainId !== 1 ? scaffoldAppProviders.targetNetwork : undefined
   );
 
-  const [yourBalance] = useContractReader(GLD, GLD?.balanceOf, [ethersAppContext.account ?? '']);
+  const [yourGLD] = useContractReader(GLD, GLD?.balanceOf, [ethersAppContext.account ?? '']);
+  const [vendorEth] = useBalance(Vendor?.address ?? '');
+  const [vendorGLD] = useContractReader(GLD, GLD?.balanceOf, [Vendor?.address ?? '']);
+
+  const [buyEvents] = useEventListener(Vendor, 'BuyTokens', 0);
+  const [sellEvents] = useEventListener(Vendor, 'SellTokens', 0);
+  console.log(buyEvents);
 
   return (
     <div className="App">
       <Header scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
       <div className="text-3xl font-extrabold font-display">BUY AND SELL GLD TOKENS</div>
-      <div className="">
+      <div>
         <span className="font-semibold">GLD⚜</span> tokens are fictional ERC20 token hosted on rinkeby.
         <br />
-        The exchange rate is 100 GLD for 1 rinkeby ETH.
+        The exchange rate is 100 GLD for 1 Goerli ETH.
       </div>
       <div>
-        Your Balance: <Balance balance={yourBalance} address={undefined} />
+        Your Balance: <Balance balance={yourGLD} address={undefined} /> GLD ⚜
+      </div>
+      {ethersAppContext.active && <TokenVendor />}
+      <div>
+        <span className="text-xl font-bold font-display">THE VENDOR CURRENTLY HOLDS:</span>
+        <div className="flex flex-row">
+          <Balance balance={vendorEth} address={undefined} /> ETH
+          <br />
+          <Balance balance={vendorGLD} address={undefined} /> GLD
+        </div>
+      </div>
+      <div className="w-full">
+        <ViewEvents sellEvents={sellEvents} buyEvents={buyEvents} />
       </div>
       <Footer scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
       <div style={{ position: 'absolute' }}>{notificationHolder}</div>
