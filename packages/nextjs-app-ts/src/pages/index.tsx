@@ -36,7 +36,7 @@ interface IMainPageProps {
   children?: ReactElement;
 }
 
-export const MainPage: FC<IMainPageProps> = (props) => {
+export const MainPage: FC<IMainPageProps> = () => {
   const notificationHolder = useCreateAntNotificationHolder();
   const scaffoldAppProviders = useScaffoldAppProviders({
     targetNetwork: TARGET_NETWORK_INFO,

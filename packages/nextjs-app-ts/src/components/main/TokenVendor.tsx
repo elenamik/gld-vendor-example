@@ -1,7 +1,9 @@
+import { Spin, message } from 'antd';
 import { useContractReader } from 'eth-hooks';
 import { useEthersAppContext } from 'eth-hooks/context';
 import { ethers } from 'ethers';
 import React, { FC, useState } from 'react';
+import { useMutation } from 'react-query';
 
 import { TransactionInput } from './TransactionInput';
 import { TransactionValue } from './TransactionValue';
@@ -13,6 +15,7 @@ const defaultQuantity = '1';
 
 export const TokenVendor: FC = () => {
   const ethersAppContext = useEthersAppContext();
+
   const GLD = useAppContracts('GLD', ethersAppContext.chainId);
   const Vendor = useAppContracts('Vendor', ethersAppContext.chainId);
 
@@ -20,15 +23,21 @@ export const TokenVendor: FC = () => {
 
   const [inputQuantity, setInputQuantity] = useState(defaultQuantity);
   const [action, setAction] = useState<'BUYING' | 'SELLING'>('BUYING');
-  const [buying, setBuying] = useState(false);
 
-  const handleBuyClick = async () => {
-    // TODO: add try catch
-    setBuying(true);
-    const ethCostToPurchaseTokens = ethers.utils.parseEther(`${inputQuantity / tokensPerEth?.toString()}`);
-    await Vendor!.buyTokens({ value: ethCostToPurchaseTokens });
-    setBuying(false);
-  };
+  const { mutate: buyGLD, isLoading: buyLoading } = useMutation(
+    async () => {
+      const ethCostToPurchaseTokens = ethers.utils.parseEther(
+        `${parseFloat(inputQuantity) / parseFloat(tokensPerEth!.toString()!)}`
+      );
+      await Vendor!.buyTokens({ value: ethCostToPurchaseTokens });
+    },
+    {
+      onSuccess: () => {
+        setInputQuantity(defaultQuantity);
+        message.success(`Successfully purchased ${inputQuantity} GLD`);
+      },
+    }
+  );
 
   const handleQuantityChange = (event: { target: { value: string } }): void => {
     const re = /^[0-9\b]+$/;
@@ -75,13 +84,19 @@ export const TokenVendor: FC = () => {
             value={parseFloat(inputQuantity) / parseFloat(tokensPerEth?.toString() ?? defaultQuantity)}
           />
           {action === 'BUYING' ? (
-            <button
-              className="p-1 mt-4 text-lg font-bold border-2 rounded-md font-display w-72"
-              onClick={handleBuyClick}>
-              EXECUTE
-            </button>
+            <div>
+              {!buyLoading ? (
+                <button className="p-1 mt-4 text-lg font-bold border-2 rounded-md font-display w-72" onClick={buyGLD}>
+                  EXECUTE
+                </button>
+              ) : (
+                <div className="mt-4">
+                  <Spin size="large" />
+                </div>
+              )}
+            </div>
           ) : (
-            <SellButton vendorWrite={Vendor} tokenWrite={GLD} inputQuantity={inputQuantity} />
+            <SellButton Vendor={Vendor} GLD={GLD} inputQuantity={inputQuantity} />
           )}
         </div>
       </div>
@@ -90,32 +105,55 @@ export const TokenVendor: FC = () => {
 };
 
 export const SellButton: FC<{
-  vendorWrite?: Vendor;
-  tokenWrite?: GLD;
+  Vendor?: Vendor;
+  GLD?: GLD;
   inputQuantity: string;
-}> = ({ vendorWrite, tokenWrite, inputQuantity }) => {
+}> = ({ GLD, Vendor, inputQuantity }) => {
   const [approved, setApproved] = useState(false);
 
-  const handleApprove = async () => {
-    await tokenWrite!.approve(vendorWrite!.address, ethers.utils.parseEther(inputQuantity));
-    setApproved(true);
-  };
-  const handleSell = async () => {
-    await vendorWrite!.sellTokens(ethers.utils.parseEther(inputQuantity));
-    setApproved(false);
-  };
+  const { mutate: approveSell, isLoading: approveLoading } = useMutation(
+    async () => {
+      await GLD!.approve(Vendor!.address, ethers.utils.parseEther(inputQuantity));
+    },
+    {
+      onSuccess: () => {
+        message.success(`Successfully approved purchase of ${inputQuantity} GLD`);
+        setApproved(true);
+      },
+    }
+  );
+
+  const { mutate: sellGLD, isLoading: sellLoading } = useMutation(
+    async () => {
+      await Vendor!.sellTokens(ethers.utils.parseEther(inputQuantity));
+    },
+    {
+      onSuccess: () => {
+        message.success(`Successfully sold ${inputQuantity} GLD`);
+        setApproved(false);
+      },
+    }
+  );
 
   if (!approved) {
-    return (
-      <button className="p-1 mt-4 text-lg font-bold border-2 rounded-md font-display w-72" onClick={handleApprove}>
+    return !approveLoading ? (
+      <button className="p-1 mt-4 text-lg font-bold border-2 rounded-md font-display w-72" onClick={approveSell}>
         APPROVE
       </button>
+    ) : (
+      <div className="mt-4">
+        <Spin size="large" />
+      </div>
     );
   } else {
-    return (
-      <button className="p-1 mt-4 text-lg font-bold border-2 rounded-md font-display w-72" onClick={handleSell}>
+    return !sellLoading ? (
+      <button className="p-1 mt-4 text-lg font-bold border-2 rounded-md font-display w-72" onClick={sellGLD}>
         EXECUTE
       </button>
+    ) : (
+      <div className="mt-4">
+        <Spin size="large" />
+      </div>
     );
   }
 };
