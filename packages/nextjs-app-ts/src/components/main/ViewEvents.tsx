@@ -18,7 +18,7 @@ export const ViewEvents: FC<{ buyEvents: TxnEvent[]; sellEvents: TxnEvent[] }> =
     return n1.blockNumber - n2.blockNumber;
   });
 
-  const colDefs = ['ADDRESS', 'TXN', 'TOKENS', 'VALUE'];
+  const colDefs = ['ADDRESS', 'TXN', 'TOKENS', 'VALUE', 'DETAILS'];
 
   const headers = colDefs.map((title: string) => {
     return (
@@ -36,6 +36,15 @@ export const ViewEvents: FC<{ buyEvents: TxnEvent[]; sellEvents: TxnEvent[] }> =
         <td className="py-2 text-lg">{event.event === 'BuyTokens' ? 'BOUGHT' : 'SOLD'}</td>
         <td className="py-2 text-lg">{formatEther(BigNumber.from(event.args[2]))} GLD ⚜️ </td>
         <td className="py-2 text-lg">{formatEther(BigNumber.from(event.args[1]))} ETH ♦ </td>
+        <td className="py-2 text-lg">
+          <a
+            target="_blank"
+            className="text-blue-700"
+            href={`https://goerli.etherscan.io/tx/${event.args[0]}`}
+            rel="noreferrer">
+            View on Goerli Scan
+          </a>
+        </td>
       </tr>
     );
   };
