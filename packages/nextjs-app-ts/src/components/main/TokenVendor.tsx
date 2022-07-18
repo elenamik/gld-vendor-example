@@ -131,7 +131,6 @@ export const SellButton: FC<{
       onSuccess: () => {
         message.success(`Successfully sold ${inputQuantity} GLD`);
         setApproved(false);
-        setApproved(false);
       },
     }
   );
