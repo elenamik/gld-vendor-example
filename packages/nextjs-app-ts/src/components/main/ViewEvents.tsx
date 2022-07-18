@@ -10,6 +10,7 @@ interface TxnEvent {
   event: 'BuyTokens' | 'SellTokens';
   args: [string, BigNumber, BigNumber]; // address, eth amount, token amount
   blockNumber: number;
+  transactionHash: string;
 }
 
 export const ViewEvents: FC<{ buyEvents: TxnEvent[]; sellEvents: TxnEvent[] }> = ({ buyEvents, sellEvents }) => {
@@ -18,7 +19,7 @@ export const ViewEvents: FC<{ buyEvents: TxnEvent[]; sellEvents: TxnEvent[] }> =
     return n1.blockNumber - n2.blockNumber;
   });
 
-  const colDefs = ['ADDRESS', 'TXN', 'TOKENS', 'VALUE', 'DETAILS'];
+  const colDefs = ['ADDRESS', 'ACTION', 'TXN', 'TOKENS', 'VALUE'];
 
   const headers = colDefs.map((title: string) => {
     return (
@@ -30,21 +31,34 @@ export const ViewEvents: FC<{ buyEvents: TxnEvent[]; sellEvents: TxnEvent[] }> =
   });
 
   const Row: React.FC<{ event: TxnEvent }> = ({ event }) => {
+    const address = event.args[0];
+    const ethAmount = formatEther(BigNumber.from(event.args[1]));
+    const tokenAmount = formatEther(BigNumber.from(event.args[2]));
     return (
       <tr>
-        <td className="py-2 text-lg">{formatDisplayAddress(event.args[0])}</td>
-        <td className="py-2 text-lg">{event.event === 'BuyTokens' ? 'BOUGHT' : 'SOLD'}</td>
-        <td className="py-2 text-lg">{formatEther(BigNumber.from(event.args[2]))} GLD ⚜️ </td>
-        <td className="py-2 text-lg">{formatEther(BigNumber.from(event.args[1]))} ETH ♦ </td>
         <td className="py-2 text-lg">
           <a
             target="_blank"
             className="text-blue-700"
-            href={`https://goerli.etherscan.io/tx/${event.args[0]}`}
+            href={`https://goerli.etherscan.io/address/${address}`}
             rel="noreferrer">
-            View on Goerli Scan
+            {formatDisplayAddress(address)}
           </a>
         </td>
+        <td className="py-2 text-lg">{event.event === 'BuyTokens' ? 'BOUGHT' : 'SOLD'}</td>
+        <td className="py-2 text-lg">
+          {' '}
+          <a
+            target="_blank"
+            className="text-blue-700"
+            href={`https://goerli.etherscan.io/tx/${event.transactionHash}`}
+            rel="noreferrer">
+            {formatDisplayAddress(event.transactionHash)}
+          </a>
+        </td>
+
+        <td className="py-2 text-lg">{tokenAmount} GLD ⚜️ </td>
+        <td className="py-2 text-lg">{ethAmount} ETH ♦ </td>
       </tr>
     );
   };
