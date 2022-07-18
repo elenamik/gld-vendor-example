@@ -13,7 +13,7 @@ import { Vendor, GLD } from '~common/generated/contract-types';
 
 const defaultQuantity = '1';
 
-export const TokenVendor: FC<{ update: () => void }> = ({ update }) => {
+export const TokenVendor: FC = () => {
   const ethersAppContext = useEthersAppContext();
 
   const GLD = useAppContracts('GLD', ethersAppContext.chainId);
@@ -35,7 +35,6 @@ export const TokenVendor: FC<{ update: () => void }> = ({ update }) => {
       onSuccess: () => {
         setInputQuantity(defaultQuantity);
         message.success(`Successfully purchased ${inputQuantity} GLD`);
-        update();
       },
     }
   );
@@ -97,7 +96,7 @@ export const TokenVendor: FC<{ update: () => void }> = ({ update }) => {
               )}
             </div>
           ) : (
-            <SellButton Vendor={Vendor} GLD={GLD} inputQuantity={inputQuantity} update={update} />
+            <SellButton Vendor={Vendor} GLD={GLD} inputQuantity={inputQuantity} />
           )}
         </div>
       </div>
@@ -109,8 +108,7 @@ export const SellButton: FC<{
   Vendor?: Vendor;
   GLD?: GLD;
   inputQuantity: string;
-  update: () => void;
-}> = ({ GLD, Vendor, inputQuantity, update }) => {
+}> = ({ GLD, Vendor, inputQuantity }) => {
   const [approved, setApproved] = useState(false);
 
   const { mutate: approveSell, isLoading: approveLoading } = useMutation(
@@ -133,7 +131,7 @@ export const SellButton: FC<{
       onSuccess: () => {
         message.success(`Successfully sold ${inputQuantity} GLD`);
         setApproved(false);
-        update();
+        setApproved(false);
       },
     }
   );
