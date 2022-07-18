@@ -1,6 +1,5 @@
 import { getNetwork } from '@ethersproject/networks';
 import { Alert } from 'antd';
-import { Account } from 'eth-components/ant';
 import { EthComponentsSettingsContext } from 'eth-components/models';
 import { useGasPrice } from 'eth-hooks';
 import {
@@ -11,6 +10,8 @@ import {
   UserClosedModalError,
 } from 'eth-hooks/context';
 import React, { FC, ReactElement, ReactNode, useCallback, useContext } from 'react';
+
+import { Account } from './Account';
 
 import { FaucetHintButton } from '~common/components';
 import { useAntNotification } from '~common/components/hooks';
@@ -70,10 +71,42 @@ export const Header: FC<IHeaderProps> = (props) => {
   );
 
   /**
+   * display the current network on the top left
+   */
+  let networkDisplay: ReactElement | undefined;
+  if (selectedChainId && selectedChainId !== props.scaffoldAppProviders.targetNetwork.chainId) {
+    const description = (
+      <div>
+        You have <b>{getNetwork(selectedChainId)?.name}</b> selected and you need to be on{' '}
+        <b>{getNetwork(props.scaffoldAppProviders.targetNetwork)?.name ?? 'UNKNOWN'}</b>.
+      </div>
+    );
+    networkDisplay = (
+      <div style={{ zIndex: 2, position: 'absolute', right: 0, top: 84, padding: 2 }}>
+        <Alert message="⚠️ Wrong Network" description={description} type="error" closable={false} />
+      </div>
+    );
+  } else {
+    networkDisplay = (
+      <div
+        style={{
+          right: 10,
+          top: 10,
+          padding: 2,
+          color: props.scaffoldAppProviders.targetNetwork.color,
+          fontSize: 12,
+        }}>
+        {props.scaffoldAppProviders.targetNetwork.name}
+      </div>
+    );
+  }
+
+  /**
    * 👨‍💼 Your account is in the top right with a wallet at connect options
    */
   const right = (
-    <div style={{ position: 'fixed', textAlign: 'right', right: 0, top: 0, padding: 10, zIndex: 1 }}>
+    <div style={{ position: 'fixed', textAlign: 'right', right: 0, top: 12, padding: 10, zIndex: 1 }}>
+      {networkDisplay}
       <Account
         createLoginConnector={props.scaffoldAppProviders.createLoginConnector}
         loginOnError={onLoginError}
@@ -92,41 +125,9 @@ export const Header: FC<IHeaderProps> = (props) => {
     </div>
   );
 
-  /**
-   * display the current network on the top left
-   */
-  let networkDisplay: ReactElement | undefined;
-  if (selectedChainId && selectedChainId !== props.scaffoldAppProviders.targetNetwork.chainId) {
-    const description = (
-      <div>
-        You have <b>{getNetwork(selectedChainId)?.name}</b> selected and you need to be on{' '}
-        <b>{getNetwork(props.scaffoldAppProviders.targetNetwork)?.name ?? 'UNKNOWN'}</b>.
-      </div>
-    );
-    networkDisplay = (
-      <div style={{ zIndex: 2, position: 'absolute', right: 0, top: 90, padding: 16 }}>
-        <Alert message="⚠️ Wrong Network" description={description} type="error" closable={false} />
-      </div>
-    );
-  } else {
-    networkDisplay = (
-      <div
-        style={{
-          position: 'absolute',
-          right: 16,
-          top: 84,
-          padding: 10,
-          color: props.scaffoldAppProviders.targetNetwork.color,
-        }}>
-        {props.scaffoldAppProviders.targetNetwork.name}
-      </div>
-    );
-  }
-
   return (
     <>
       {left}
-      {networkDisplay}
       {right}
     </>
   );
