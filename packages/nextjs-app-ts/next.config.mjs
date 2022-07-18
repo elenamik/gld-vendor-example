@@ -7,6 +7,7 @@ const nextConfig = {
   experimental: { esmExternals: true, emotion: true, externalDir: true, reactRefresh: true, swcFileReading: true },
   swcMinify: true,
   productionBrowserSourceMaps: true,
+  typescript: {ignoreBuildErrors:true},
   webpack: (config, { dev, isServer }) => {
     config.resolve.alias = {
       ...config.resolve.alias,
