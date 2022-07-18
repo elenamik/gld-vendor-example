@@ -8,6 +8,7 @@ const nextConfig = {
   swcMinify: true,
   productionBrowserSourceMaps: true,
   typescript: {ignoreBuildErrors:true},
+  eslint:{ignoreDuringBuilds},
   webpack: (config, { dev, isServer }) => {
     config.resolve.alias = {
       ...config.resolve.alias,
