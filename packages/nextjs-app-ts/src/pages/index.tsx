@@ -63,12 +63,20 @@ export const MainPage: FC<IMainPageProps> = () => {
     ethersAppContext.chainId !== 1 ? scaffoldAppProviders.targetNetwork : undefined
   );
 
-  const [yourGLD] = useContractReader(GLD, GLD?.balanceOf, [ethersAppContext.account ?? '']);
-  const [vendorEth] = useBalance(Vendor?.address ?? '');
-  const [vendorGLD] = useContractReader(GLD, GLD?.balanceOf, [Vendor?.address ?? '']);
+  const [yourGLD, updateYourGLD] = useContractReader(GLD, GLD?.balanceOf, [ethersAppContext.account ?? '']);
+
+  const [vendorEth, updateVendorEth] = useBalance(Vendor?.address ?? '');
+  const [vendorGLD, updateVendorGLD] = useContractReader(GLD, GLD?.balanceOf, [Vendor?.address ?? '']);
 
   const [buyEvents] = useEventListener(Vendor, 'BuyTokens', 0);
   const [sellEvents] = useEventListener(Vendor, 'SellTokens', 0);
+
+  const updateBalancesPostTransaction = () => {
+    // manually triggering balance updates when an action is taken, because there is a bug where they do not update on block update
+    updateYourGLD();
+    updateVendorGLD();
+    updateVendorEth();
+  };
 
   return (
     <div className="App">
@@ -92,7 +100,7 @@ export const MainPage: FC<IMainPageProps> = () => {
         </div>
       </div>
       <div id="vendor" className="my-6">
-        {ethersAppContext.active && <TokenVendor />}
+        {ethersAppContext.active && <TokenVendor update={updateBalancesPostTransaction} />}
       </div>
       <div id="vendor-balances" className="py-6">
         <span id="info-text" className="text-xl font-bold font-display">

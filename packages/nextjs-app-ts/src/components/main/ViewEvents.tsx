@@ -22,9 +22,9 @@ export const ViewEvents: FC<{ buyEvents: TxnEvent[]; sellEvents: TxnEvent[] }> =
 
   const headers = colDefs.map((title: string) => {
     return (
-      <th className="px-6 text-xl font-medium opacity-70 text-brown font-body" key={title}>
+      <th className="px-6 text-xl font-medium text-gray font-body" key={title}>
         {title}
-        <div className="w-32 border-t-2 border-color-brown" />
+        <div className="w-32 border-t-2 border-color-gray" />
       </th>
     );
   });
