@@ -1,4 +1,5 @@
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
+import { Spin } from 'antd';
 import { Balance } from 'eth-components/ant';
 import { useBalance, useSignerAddress } from 'eth-hooks';
 import { useEthersAppContext, useBlockNumberContext } from 'eth-hooks/context';
@@ -112,13 +113,19 @@ export const Account: FC<IAccountProps> = (props: IAccountProps) => {
 
   const loadModalButton = (
     <>
-      {showLoadModal && props.createLoginConnector && (
-        <div
-          onClick={handleLoginClick}
-          className="flex flex-row items-center px-4 py-1 text-lg border-2 bg-yellow rounded-md">
-          connect
-        </div>
-      )}
+      {showLoadModal &&
+        props.createLoginConnector &&
+        (!loadingButtonDebounce.isPending() ? (
+          <div
+            onClick={handleLoginClick}
+            className="flex flex-row items-center px-4 py-1 text-lg border-2 bg-yellow rounded-md">
+            connect
+          </div>
+        ) : (
+          <div className="px-8 py-1 mt-2 text-lg border-2 bg-yellow rounded-md">
+            <Spin size="small" />
+          </div>
+        ))}
     </>
   );
 

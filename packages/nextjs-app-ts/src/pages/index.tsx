@@ -107,7 +107,7 @@ export const MainPage: FC<IMainPageProps> = () => {
           THE VENDOR CURRENTLY HOLDS:
         </span>
         <div id="bals" className="flex flex-row justify-center">
-          <div id="eth-bal" className="flex flex-row items-center px-3 mx-6 text-2xl p bg-yellow">
+          <div id="eth-bal" className="flex flex-row items-center px-3 mx-6 text-2xl p bg-yellow ">
             <Balance balance={vendorEth} address={undefined} />
             <span>ETH</span>
           </div>
