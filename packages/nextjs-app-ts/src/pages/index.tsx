@@ -1,6 +1,6 @@
 import { Balance } from 'eth-components/ant';
 import { useBalance, useContractReader, useEthersAdaptorFromProviderOrSigners, useEventListener } from 'eth-hooks';
-import { useEthersAppContext } from 'eth-hooks/context';
+import { useBlockNumberContext, useEthersAppContext } from 'eth-hooks/context';
 import { useDexEthPrice } from 'eth-hooks/dapps';
 import { asEthersAdaptor } from 'eth-hooks/functions';
 import React, { FC, ReactElement } from 'react';
@@ -78,6 +78,11 @@ export const MainPage: FC<IMainPageProps> = () => {
     updateVendorEth();
   };
 
+  const blockNumber = useBlockNumberContext();
+  React.useEffect(() => {
+    updateBalancesPostTransaction();
+  }, [blockNumber]);
+
   return (
     <div className="App">
       <Header scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
@@ -100,7 +105,7 @@ export const MainPage: FC<IMainPageProps> = () => {
         </div>
       </div>
       <div id="vendor" className="my-6">
-        {ethersAppContext.active && <TokenVendor update={updateBalancesPostTransaction} />}
+        {ethersAppContext.active && <TokenVendor />}
       </div>
       <div id="vendor-balances" className="py-6">
         <span id="info-text" className="text-xl font-bold font-display">
