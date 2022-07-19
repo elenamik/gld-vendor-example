@@ -1,5 +1,6 @@
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { Spin } from 'antd';
+import Link from 'antd/lib/typography/Link';
 import { Balance } from 'eth-components/ant';
 import { useBalance, useSignerAddress } from 'eth-hooks';
 import { useEthersAppContext, useBlockNumberContext } from 'eth-hooks/context';
@@ -147,7 +148,9 @@ export const Account: FC<IAccountProps> = (props: IAccountProps) => {
       {resolvedAddress != null && (
         <div className="flex flex-col justify-center align-middle font-body">
           <div className="flex flex-row items-center px-4 py-1 text-lg border-2 bg-yellow rounded-md">
-            {formatDisplayAddress(resolvedAddress)}
+            <Link style={{ color: '#000000' }} copyable={{ text: resolvedAddress }}>
+              {formatDisplayAddress(resolvedAddress)}
+            </Link>
             {logoutButton}
           </div>
           <div>

@@ -9,7 +9,6 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 contract GLD is ERC20 {
   // constructor and mint tokens for deployer
   constructor() ERC20("Gold", "GLD") {
-    console.log("SENDER", msg.sender);
     _mint(msg.sender, 1000 * 10**18);
   }
 }
